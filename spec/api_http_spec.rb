@@ -155,12 +155,42 @@ describe '/controller2' do
     params = {username: 'any', password: 'anything', abc_params: 'blah', def_params: 'like'}
     path = '/controller2/action5'
     @requester.make_request :post, params, path, nil
-    @requester.body.should == "{\"abc_params\":\"blah\",\"def_params\":\"like\"}"
+    @requester.body.should == "{\"url_params\":{},\"body_params\":{\"username\":\"any\",\"password\":\"anything\",\"abc_params\":\"blah\",\"def_params\":\"like\"}}"
     @requester.code.should == SecureApi::Response::OK
   end
 
 #josh test end
 
+  it "action 6 should test an alternative callback" do
+    opt = {}
+
+    params = {username: 'any', password: 'anything'}
+    path = '/controller2/action6'
+    @requester.make_request :post, params, path, nil
+    @requester.body.should == "{\"ok\":\"it is\"}"
+    @requester.code.should == SecureApi::Response::OK
+  end
+
+  it "action 6 should test an alternative callback again" do
+    opt = {}
+
+    params = {username: 'any', password: 'anything', a_value: " a good callback"}
+    path = '/controller2/action6'
+    @requester.make_request :post, params, path, nil
+    @requester.body.should == "{\"ok\":\"it is a good callback\"}"
+    @requester.code.should == SecureApi::Response::OK
+  end
+  
+  it "action 6 should test an alternative callback is reset cleanly" do
+    opt = {}
+
+    params = {username: 'any', password: 'anything'}
+    path = '/controller2/action6'
+    @requester.make_request :post, params, path, nil
+    @requester.body.should == "{\"ok\":\"it is\"}"
+    @requester.code.should == SecureApi::Response::OK
+  end
+    
   it "should test timeouts " do    
     path = '/admin/status'
     options = {}

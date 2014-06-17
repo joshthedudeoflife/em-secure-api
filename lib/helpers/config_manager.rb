@@ -1,4 +1,5 @@
 require 'yaml'
+require 'fileutils' 
 unless defined? REQ
   REQ = File.expand_path('./lib')  
 end
@@ -53,21 +54,15 @@ class ConfigManager
     
     yk = keyc.to_yaml
     
+    FileUtils.mkdir CONFIG_FILE_KEYS_DIR
     f = File.open(key_filename, 'wb').write(yk)
     
     puts "
 *****************************************************************************
-Psuedo random key has been written to RAM disk and will be removed on reboot. 
-File: #{key_filename}
+Psuedo random key has been written to the location below. If this is RAM disk
+it will be removed on reboot. 
 
-Now copy the line below and paste it into the top of a new file
-by running: sudo nano /etc/init.d/reweb
-
-/bin/echo -e '#{yk.gsub("\n","\\n")}' > #{key_filename}
-    
-Then run the command
-
-sudo update-rc.d reweb defaults
+Key File: #{key_filename}
     
 *****************************************************************************
     "
